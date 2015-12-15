@@ -10,7 +10,7 @@ export default class Scene extends Component {
   }
   render () {
     const planets = this.props.planets.map((planet, i) => (
-      <Planet x={planet.x} y={planet.y} key={i} />
+      <Planet {...planet} key={planet.id} />
     ))
     return (
         <Stage width={800} height={450} backgroundcolor={0x000000}>

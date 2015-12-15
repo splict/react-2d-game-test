@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+
 import Scene from '../components/Scene'
 import Options from '../components/options'
+import * as PlanetActions from '../actions/planets'
 
 const containerStyles = {
   display: 'flex',
@@ -13,30 +17,43 @@ const sidePanelStyles = {
   flexShrink: 0,
 }
 
-export default class App extends Component {
+class App extends Component {
   constructor () {
     super()
-    this.state = {}
   }
   render () {
+    const { planets, actions } = this.props
     return (
       <div style={containerStyles}>
         <div style={mainPanelStyles}>
-          <Scene planets={this.props.planets} />
+          <Scene planets={planets} />
         </div>
         <div style={sidePanelStyles}>
-          <Options planets={this.props.planets} />
+          <Options planets={planets}
+            editPlanetX={actions.editPlanetX}
+            editPlanetY={actions.editPlanetY}
+          />
         </div>
       </div>
     )
   }
   static get defaultProps () {
     return {
-      planets: [
-        {x: 100, y: 100, name: 'Bad Planet'},
-        {x: 375, y: 220, name: 'Good Planet One'},
-        {x: 600, y: 360, name: 'Good Planet Two'},
-      ],
+      planets: [],
     }
   }
 }
+
+function select(state) {
+  return {
+    planets: state.planets,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(PlanetActions, dispatch)
+  }
+}
+
+export default connect(select, mapDispatchToProps)(App)
